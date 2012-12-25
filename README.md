@@ -4,7 +4,9 @@
 This is a trivial message broker implementation that utilizes HTTP as its transport. I built this purely as a project to learn node.js. It is certainly not intended to be production-grade software.
 
 ## Installation
-1. `npm install mbroker_http`
+1. `wget 'https://github.com/ycombinator/mbroker_http/archive/master.zip'`
+2. `cd mbroker_http-master`
+3. `npm install`
 
 ## Startup
 1. `node app.js`
