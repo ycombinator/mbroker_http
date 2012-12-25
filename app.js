@@ -2,22 +2,11 @@ var express = require('express'),
     topic = require('./lib/topic'),
     message = require('./lib/message');
 
+
 var app = express();
 app.use(express.json());
 
-topics = {};
-
-createTopic = function(req, res) {
-
-    topicId = req.params.id;
-    if (topics[topicId] == undefined) {
-	topics[topicId] = new topic.Topic(topicId);
-	res.send(201, 'Topic ' + topicId + ' created.');
-    } else {
-	res.send(200, 'Topic ' + topicId + ' already created.');
-    }
-    
-};
+var topics = {};
 
 listTopics = function(req, res) {
 
@@ -32,6 +21,17 @@ listTopics = function(req, res) {
 
 };
 
+createTopicIfNotExists = function(topicId) {
+
+    if (topics[topicId] === undefined) {
+	topics[topicId] = new topic.Topic(topicId);
+	console.log("New topic " + topicId + " created");
+    }
+    
+    return topics[topicId];
+
+}
+
 sendMessage = function(req, res) {
 
     body = req.body;
@@ -40,71 +40,51 @@ sendMessage = function(req, res) {
 
     sent = 0;
     for (index in recipients) {
+
 	topicId = recipients[index];
-	if (topics[topicId] != undefined) {
-	    m = new message.Message(text);
-	    topics[topicId].messages.push(m);
-	    ++sent;
-	}
+	t = createTopicIfNotExists(topicId);
+
+	m = new message.Message('message', text);
+	sent += t.sendMessage(m);
+
     }
 
-    res.send(201, "Message sent to " + sent + " out of " + recipients.length + " topics.");
+    res.send(201, "Message sent to " + sent + " subscribers");
 
 };
 
 getAllMessages = function(req, res) {
 
     topicId = req.params.id;
-    if (topics[topicId] == undefined) {
-	res.send(404, 'Topic ' + topicId + ' not found.');
-	return;
-    }
+    t = createTopicIfNotExists(topicId);
 
-    messages = topics[topicId].messages;
-    for (index in messages) {
-	message = messages[index];
-	++message.numRead;
-    }
-
-    res.send(200, messages);
+    t.subscribers.push(res);
+    console.log("New subscriber for topic = " + topicId);
+    res.writeHead(200);
 
 };
 
-getUnreadMessages = function(req, res) {
+shutdown = function() {
+    closeSubscriberStreams();
+    process.exit();
+}
 
-    topicId = req.params.id;
-    if (topics[topicId] == undefined) {
-	res.send(404, 'Topic ' + topicId + ' not found.');
-	return;
+closeSubscriberStreams = function() {
+
+    console.log("Process is shutting down...");
+    for (id in topics) {
+
+	console.log("Closing subscriber streams for topic = " + id);
+	t = topics[id];
+	t.closeSubscriberStreams();
     }
-
-    messages = topics[topicId].messages;
-    unreadMessages = [];
-    for (index in messages) {
-	message = messages[index];
-	if (message.numRead == 0) {
-	    unreadMessages.push(message);
-	    ++message.numRead;
-	}
-    }
-
-    res.send(200, unreadMessages);
 
 };
 
-
-// Routes
-// 1. User creates topic. PUT /topic/:id
-// 2. User gets a list of created topics. GET /topics
-// 3. User sends a message to topic(s). POST /messages { "to": [ "topic1", "topic2" ], "message": "Hello" }
-// 4. User retrieves ALL messages from a topic. GET /topic/:id/messages
-// 5. User retrieves UNREAD messages from a topic. GET /topic/:id/messages/unread
-
-app.put('/topic/:id', createTopic);
 app.get('/topics', listTopics);
 app.post('/messages', sendMessage);
 app.get('/topic/:id/messages', getAllMessages);
-app.get('/topic/:id/messages/unread', getUnreadMessages);
 
 app.listen(3000);
 console.log('Listening on port 3000');
+process.on('SIGINT', shutdown);
