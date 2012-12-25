@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ycombinator/mbroker_http.png?branch=master)](https://travis-ci.org/ycombinator/mbroker_http)
+
 # HTTP-based message broker
 
 ## Introduction
