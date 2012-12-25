@@ -49,7 +49,7 @@ sendMessage = function(req, res) {
 
     }
 
-    res.send(201, "Message sent to " + sent + " subscribers");
+    res.send(201, "Message sent to " + sent + " subscribers\n");
 
 };
 
@@ -58,9 +58,7 @@ getAllMessages = function(req, res) {
     topicId = req.params.id;
     t = createTopicIfNotExists(topicId);
 
-    t.subscribers.push(res);
-    console.log("New subscriber for topic = " + topicId);
-    res.writeHead(200);
+    t.addSubscriber(req, res);
 
 };
 
