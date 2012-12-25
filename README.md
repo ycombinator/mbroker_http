@@ -19,10 +19,10 @@ This is a trivial message broker implementation that utilizes HTTP as its transp
 `GET /topics`
 
 ### Publish a message to topic(s)
-`POST /messages`
+`POST /messages`  
 `{ "to": [ "topic1", "topic2" ], "message": "Hello" }`  
-If a topic does not exist, it is automatically created.
+* If a topic does not exist, it is automatically created.
 
 ### Subscribe to a topic
 `GET /topic/{id}/messages`  
-If the topic does not exist, it is automatically created.
+* If the topic does not exist, it is automatically created.
