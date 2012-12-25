@@ -20,7 +20,10 @@ This is a trivial message broker implementation that utilizes HTTP as its transp
 
 ### Publish a message to topic(s)
     POST /messages
-    { "to": [ "topic1", "topic2" ], "message": "Hello" }
+    {
+      "message": "Hello",
+      "to": [ "topic1", "topic2" ]
+    }
 If a topic does not exist, it is automatically created.
 
 ### Subscribe to a topic
