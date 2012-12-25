@@ -1,30 +1,17 @@
-var express = require('express');
+var express = require('express'),
+    topic = require('./lib/topic'),
+    message = require('./lib/message');
 
 var app = express();
 app.use(express.json());
 
 topics = {};
 
-Topic = function(topicId) {
-
-    this.topicId = topicId;
-    this.messages = [];
-
-};
-
-Message = function(message) {
-
-    this.message = message;
-    this.receivedOn = new Date();
-    this.numRead = 0;
-
-};
-
 createTopic = function(req, res) {
 
     topicId = req.params.id;
     if (topics[topicId] == undefined) {
-	topics[topicId] = new Topic(topicId);
+	topics[topicId] = new topic.Topic(topicId);
 	res.send(201, 'Topic ' + topicId + ' created.');
     } else {
 	res.send(200, 'Topic ' + topicId + ' already created.');
@@ -48,15 +35,15 @@ listTopics = function(req, res) {
 sendMessage = function(req, res) {
 
     body = req.body;
-    message = body.message;
+    text = body.message;
     recipients = body.to;
 
     sent = 0;
     for (index in recipients) {
 	topicId = recipients[index];
 	if (topics[topicId] != undefined) {
-	    message = new Message(message);
-	    topics[topicId].messages.push(message);
+	    m = new message.Message(text);
+	    topics[topicId].messages.push(m);
 	    ++sent;
 	}
     }
