@@ -1,10 +1,13 @@
 {
   "name": "mbroker_http",
   "description": "HTTP-based message broker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/ycombinator/mbroker_http.git"
+  },
+  "bin" : {
+    "mbroker-http": "./bin/mbroker-http"
   },
   "dependencies": {
     "express": "3.0.5"
