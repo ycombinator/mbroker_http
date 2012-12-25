@@ -17,8 +17,8 @@ This is a trivial message broker implementation that utilizes HTTP as its transp
 `PUT /topic/{id}`
 
 ### Send a message to topic(s)
-`POST /messages
-{ "to": [ "topic1", "topic2" ], "message": "Hello" }`
+`POST /messages`
+`{ "to": [ "topic1", "topic2" ], "message": "Hello" }`
 
 ### Get all unread messages in a topic
 `GET /topic/{id}/messages/unread`
