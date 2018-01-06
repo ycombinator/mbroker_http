@@ -3,7 +3,7 @@
 # HTTP-based message broker
 
 ## Introduction
-This is a trivial message broker implementation that utilizes HTTP as its transport. I built this project purely to learn [http://nodejs.org/](node.js), [http://expressjs.com/][(Express), [http://visionmedia.github.com/mocha/](mocha) and [https://travis-ci.org/](Travis CI); it is certainly **not intended to be production-grade software**.
+This is a trivial message broker implementation that utilizes HTTP as its transport. I built this project purely to learn [http://nodejs.org/](node.js), [http://expressjs.com/][(Express), [http://mochajs.org/](mocha) and [https://travis-ci.org/](Travis CI); it is certainly **not intended to be production-grade software**.
 
 ## Installation
 1. `wget 'https://github.com/ycombinator/mbroker_http/archive/master.zip'` (If you get certificate errors, try [this](http://blog.55minutes.com/2012/01/fixing-https-certificate-errors-in-wget-and-ruby/)).
